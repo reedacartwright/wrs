@@ -1,4 +1,4 @@
 wrs
 ===
 
-Algorithms Weighted Reservoir Sampling
+Algorithms for Weighted Reservoir Sampling
