@@ -36,6 +36,6 @@ inline double rand_exp_zig(xorshift64 &rng) {
 	return a*ew[b];
 }
 
-inline double rand_exp(xorshift64 &rng, double mu = 1.0) { return rand_exp_zig(rng)*mu; }
+inline double rand_exp(xorshift64 &rng, double rate = 1.0) { return rand_exp_zig(rng)/rate; }
 
 #endif
