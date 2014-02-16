@@ -2,14 +2,14 @@
 #include <cstdlib>
 #include <iostream>
 #include <queue>
+#include <vector>
 
 #include "xorshift64.h"
 #include "rexp.h"
+#include "rbeta.h"
 
-
-// implement reservoir as a heap of pairs
-typedef std::pair<double,int> element;
-typedef std::priority_queue<element> reservoir;
+// implement reservoir as a vector
+typedef std::vector<int> reservoir;
 
 using namespace std;
 
@@ -31,21 +31,25 @@ int main( int argc, const char* argv[] ) {
 		xorshift64 stream(2693652924);
 
 		reservoir res;				
-		// Algorithm RAC-A
+		// Algorithm RAC-F
 		double w = stream.get_double52();
-		for(int i=0;i<sample_size;++i) {
-			res.emplace(rand_exp(rng,w),0);
-		}
+		res.assign(sample_size,0);
+		
+		double t = rand_gamma(rng,sample_size,1.0/w);
+		double o = rand_exp(rng,t);
+		
 		for(int i=1;i<stream_size;++i) {
 			w = stream.get_double52();
-			double v = rand_exp(rng,w);
-			while(v < res.top().first ) {
-				res.pop();
-				res.emplace(v,i);
-				v += rand_exp(rng,w);
+			while(o < w) {
+				int j = static_cast<int>(sample_size*rng.get_double52());
+				res[j] = i;
+				t = t*rand_beta(rng,sample_size,1);
+				w = w-o;
+				o = rand_exp(rng,t);
 			}
+			o = o-w;		
 		}
-		cout << res.top().second << endl;
+		cout << res[0] << endl;
 	}
 	return 0;
 }

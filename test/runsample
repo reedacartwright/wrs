@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 program-name"
+    exit 1
+fi
+
+stream=1e7
+rep=100
+
+prog=$1
+
+
+samples=`seq 10000 10000 100000`
+
+for i in $samples; do
+	/usr/bin/time -f "%E\t%M" $prog $stream $i $rep > /dev/null
+done
+
