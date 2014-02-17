@@ -10,7 +10,7 @@
 
 extern const double ew[256];
 extern const double ef[256];
-extern const uint64_t ek[256];
+extern const int64_t ek[256];
 
 inline double rand_exp_inv(xorshift64 &rng) { return -log(rng.get_double52()); }
 
