@@ -18,9 +18,9 @@ inline double rand_exp_zig(xorshift64 &rng) {
 	const double r = 7.69711747013104972;
 	uint64_t u = rng.get_uint64();
 	// use the top 8 high bits for b
-	size_t b = u >> 56;
+	uint64_t b = u >> 56;
 	// use the rest for a
-	int64_t a = static_cast<int64_t>( u & UINT64_C(0x0fffffffffffffff)); 
+	int64_t a = static_cast<int64_t>(u & UINT64_C(0x0fffffffffffffff)); 
 	while( a > ek[b] ) {
 		if(b == 0)
 			return r+rand_exp_inv(rng);
@@ -30,7 +30,7 @@ inline double rand_exp_zig(xorshift64 &rng) {
 			return x;
 		u = rng.get_uint64();
 		b = u >> 56;
-		a = static_cast<int64_t>( u & UINT64_C(0x0fffffffffffffff)); 
+		a = static_cast<int64_t>(u & UINT64_C(0x0fffffffffffffff)); 
 	}
 	
 	return a*ew[b];
