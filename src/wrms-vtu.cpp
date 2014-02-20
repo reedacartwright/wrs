@@ -30,8 +30,10 @@ int main( int argc, const char* argv[] ) {
 		// construct the stream RNG
 		xorshift64 stream(2693652924);
 
-		reservoir res;				
-		// Algorithm RAC-F
+		reservoir res;
+		res.reserve(sample_size);
+						
+		// Algorithm WRMS-VTU
 		double w = stream.get_double52();
 		res.assign(sample_size,0);
 		
@@ -41,7 +43,7 @@ int main( int argc, const char* argv[] ) {
 		for(int i=1;i<stream_size;++i) {
 			w = stream.get_double52();
 			while(o < w) {
-				int j = static_cast<int>(sample_size*rng.get_double52());
+				int j = rng.get_uint(sample_size);
 				res[j] = i;
 				t = t*rand_beta(rng,sample_size,1);
 				w = w-o;
@@ -49,7 +51,7 @@ int main( int argc, const char* argv[] ) {
 			}
 			o = o-w;		
 		}
-		cout << res[0] << endl;
+		cout << res.front() << endl;
 	}
 	return 0;
 }
