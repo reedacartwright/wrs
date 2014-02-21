@@ -29,15 +29,15 @@ int main( int argc, const char* argv[] ) {
 		// construct the stream RNG
 		xorshift64 stream(2693652924);
 
-		reservoir res;
-		res.reserve(sample_size);
-
+		reservoir res(sample_size, make_pair(0.0,0));
+		
 		// Algorithm WRMS-HTU
 		double w = stream.get_double52();
-		for(int i=0;i<sample_size;++i) {
-			res.emplace_back(rand_exp(rng,w),0);
+		double v = 0.0;
+		for(int i=sample_size;i>0;--i) {
+			v += rand_exp(rng,w);
+			res[i-1].first = v;
 		}
-		make_heap(res.begin(),res.end());
 		
 		double t = res.front().first;
 		double o = rand_exp(rng,t);
@@ -45,7 +45,7 @@ int main( int argc, const char* argv[] ) {
 		for(int i=1;i<stream_size;++i) {
 			w = stream.get_double52();
 			while(o < w) {
-				double v = t*rng.get_double52();
+				v = t*rng.get_double52();
 				
 				pop_heap(res.begin(),res.end());
 				res.back().first = v;
