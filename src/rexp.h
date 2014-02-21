@@ -20,7 +20,7 @@ inline double rand_exp_zig(xorshift64 &rng) {
 	// use the top 8 high bits for b
 	uint64_t b = u >> 56;
 	// use the rest for a
-	int64_t a = static_cast<int64_t>(u & UINT64_C(0x0fffffffffffffff)); 
+	int64_t a = static_cast<int64_t>(u & UINT64_C(0x00ffffffffffffff)); 
 	while( a > ek[b] ) {
 		if(b == 0)
 			return r+rand_exp_inv(rng);
@@ -30,7 +30,7 @@ inline double rand_exp_zig(xorshift64 &rng) {
 			return x;
 		u = rng.get_uint64();
 		b = u >> 56;
-		a = static_cast<int64_t>(u & UINT64_C(0x0fffffffffffffff)); 
+		a = static_cast<int64_t>(u & UINT64_C(0x00ffffffffffffff)); 
 	}
 	
 	return a*ew[b];
