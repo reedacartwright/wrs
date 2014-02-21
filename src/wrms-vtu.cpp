@@ -30,12 +30,10 @@ int main( int argc, const char* argv[] ) {
 		// construct the stream RNG
 		xorshift64 stream(2693652924);
 
-		reservoir res;
-		res.reserve(sample_size);
+		reservoir res(sample_size,0);
 						
 		// Algorithm WRMS-VTU
 		double w = stream.get_double52();
-		res.assign(sample_size,0);
 		
 		double t = rand_gamma(rng,sample_size,1.0/w);
 		double o = rand_exp(rng,t);
@@ -45,8 +43,8 @@ int main( int argc, const char* argv[] ) {
 			while(o < w) {
 				int j = rng.get_uint(sample_size);
 				res[j] = i;
-				//t = t*rand_beta(rng,sample_size,1);
-				t = t*exp(-rand_exp(rng)/sample_size);
+				t = t*rand_beta(rng,sample_size,1);
+				//t = t*exp(-rand_exp(rng)/sample_size);
 				//t = t*pow(rng.get_double52(), 1.0/sample_size);
 				//t = t-t*rand_exp(rng,sample_size+1.0);
 				//t = t*((sample_size+0.0)/(sample_size+1.0));

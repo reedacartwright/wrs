@@ -29,8 +29,7 @@ int main( int argc, const char* argv[] ) {
 		// construct the stream RNG
 		xorshift64 stream(2693652924);
 
-		reservoir res;
-		res.reserve(sample_size);
+		reservoir res(sample_size,make_pair(0.0,0));
 
 		// Algorithm WRMS-HT
 		double w = stream.get_double52();
@@ -49,7 +48,7 @@ int main( int argc, const char* argv[] ) {
 				o -= w;
 				continue;
 			}
-			double v = rand_exp_trunc(rng,t,w);
+			v = rand_exp_trunc(rng,t,w);
 			do {
 				pop_heap(res.begin(),res.end());
 				res.back().first = v;
