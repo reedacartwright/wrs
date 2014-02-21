@@ -45,7 +45,11 @@ int main( int argc, const char* argv[] ) {
 			while(o < w) {
 				int j = rng.get_uint(sample_size);
 				res[j] = i;
-				t = t*rand_beta(rng,sample_size,1);
+				//t = t*rand_beta(rng,sample_size,1);
+				t = t*exp(-rand_exp(rng)/sample_size);
+				//t = t*pow(rng.get_double52(), 1.0/sample_size);
+				//t = t-t*rand_exp(rng,sample_size+1.0);
+				//t = t*((sample_size+0.0)/(sample_size+1.0));
 				w = w-o;
 				o = rand_exp(rng,t);
 			}
