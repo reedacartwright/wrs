@@ -34,14 +34,16 @@ int main( int argc, const char* argv[] ) {
 
 		// Algorithm WRMS-HW
 		double w = stream.get_double52();
+		double v = 0.0;
 		for(int i=0;i<sample_size;++i) {
-			res.emplace_back(rand_exp(rng,w),0);
+			v += rand_exp(rng,w);
+			res.emplace_back(v,0);
 		}
 		make_heap(res.begin(),res.end());
 		
 		for(int i=1;i<stream_size;++i) {
 			w = stream.get_double52();
-			double v = rand_exp(rng,w);
+			v = rand_exp(rng,w);
 			while(v < res.front().first ) {
 				pop_heap(res.begin(),res.end());
 				res.back().first = v;

@@ -34,8 +34,10 @@ int main( int argc, const char* argv[] ) {
 
 		// Algorithm WRMS-HTW
 		double w = stream.get_double52();
+		double v = 0.0;
 		for(int i=0;i<sample_size;++i) {
-			res.emplace_back(rand_exp(rng,w),0);
+			v += rand_exp(rng,w);
+			res.emplace_back(v,0);
 		}
 		make_heap(res.begin(),res.end());
 		
@@ -44,7 +46,7 @@ int main( int argc, const char* argv[] ) {
 		
 		for(int i=1;i<stream_size;++i) {
 			w = stream.get_double52();
-			double v = 0.0;
+			v = 0.0;
 			while(o < w) {
 				v = v+(t-v)*o/w;		
 				pop_heap(res.begin(),res.end());
