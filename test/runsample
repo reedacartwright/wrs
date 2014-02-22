@@ -5,12 +5,12 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-stream=1e5
-rep=1
+stream=1e8
+rep=10
 
 prog=$1
 
-samples=`seq 1000 1000 10000`
+samples=`seq 10000 10000 100000`
 
 trap ctrl_c INT
 function ctrl_c() {

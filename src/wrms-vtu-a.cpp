@@ -44,7 +44,8 @@ int main( int argc, const char* argv[] ) {
 				int j = rng.get_uint(sample_size);
 				res[j] = i;
 				//t *= rand_beta(rng,sample_size,1);
-				t *= exp(-rand_exp(rng,sample_size));
+				//t *= exp(-rand_exp(rng,sample_size));
+				t *= 1.0-rand_exp(rng,sample_size);
 				w = w-o;
 				o = rand_exp(rng,t);
 			}

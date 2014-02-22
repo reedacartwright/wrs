@@ -35,7 +35,8 @@ int main( int argc, const char* argv[] ) {
 		// Algorithm WRMS-VTU
 		double w = stream.get_double52();
 		
-		double t = rand_gamma(rng,sample_size,1.0/w);
+		//double t = rand_gamma(rng,sample_size,1.0/w);
+		double t = sample_size/w;
 		double o = rand_exp(rng,t);
 		
 		for(int i=1;i<stream_size;++i) {
@@ -44,7 +45,8 @@ int main( int argc, const char* argv[] ) {
 				int j = rng.get_uint(sample_size);
 				res[j] = i;
 				//t *= rand_beta(rng,sample_size,1);
-				t *= exp(-rand_exp(rng,sample_size));
+				//t *= exp(-rand_exp(rng,sample_size));
+				t *= (sample_size/(sample_size+1.0));
 				w = w-o;
 				o = rand_exp(rng,t);
 			}

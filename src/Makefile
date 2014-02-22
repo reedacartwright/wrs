@@ -1,8 +1,9 @@
-CXX = c++
-CXXFLAGS = -g -O2 -std=c++11
+CXX = icpc
+CXXFLAGS = -O2 -std=c++11
 HEADERS = rbeta.h  rexp.h  rgamma.h  rnormal.h  xorshift64.h
 OBJ = rnormal.o rexp.o
-TARGETS = wrms-ht wrms-htu wrms-hw wrms-vtw wrms-htm  wrms-htw  wrms-vtu
+TARGETS = wrms-ht wrms-htu wrms-hw wrms-vtw wrms-htm \
+          wrms-htw wrms-vtu std-b wrms-vtu-a wrms-vtu-b
 
 .PHONY: clean
 .PHONY: all
@@ -25,4 +26,7 @@ wrms-vtw: wrms-vtw.o
 wrms-htm: wrms-htm.o
 wrms-htw: wrms-htw.o
 wrms-vtu: wrms-vtu.o
+wrms-vtu-a: wrms-vtu-a.o
+wrms-vtu-b: wrms-vtu-b.o
+std-b: std-b.o
 
