@@ -1,9 +1,19 @@
-CXX = icpc
-CXXFLAGS = -O2 -std=c++11
+# g++ (GCC) 4.8.2 20131219 (prerelease)
+CXX = g++
+CXXFLAGS = -DNDEBUG -flto -O3 -march=native -std=c++11 -ffast-math
+
+# icpc (ICC) 14.0.1 20131008
+#CXX = icpc
+#CXXFLAGS = -DNDEBUG -fast -std=c++11
+
+# clang version 3.4 (tags/RELEASE_34/final)
+#CXX = clang++
+#CXXFLAGS = -DNDEBUG -Ofast -march=native -std=c++11
+
 HEADERS = rbeta.h  rexp.h  rgamma.h  rnormal.h  xorshift64.h
 OBJ = rnormal.o rexp.o
 TARGETS = wrms-ht wrms-htu wrms-hw wrms-vtw wrms-htm \
-          wrms-htw wrms-vtu std-b wrms-vtu-a wrms-vtu-b
+          wrms-htw wrms-vtu std wrms-vtu-a wrms-vtu-b
 
 .PHONY: clean
 .PHONY: all
@@ -28,5 +38,5 @@ wrms-htw: wrms-htw.o
 wrms-vtu: wrms-vtu.o
 wrms-vtu-a: wrms-vtu-a.o
 wrms-vtu-b: wrms-vtu-b.o
-std-b: std-b.o
+std: std.o
 

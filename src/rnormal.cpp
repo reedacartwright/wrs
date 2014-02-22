@@ -1,4 +1,5 @@
 #include <cstdint>
+#include "rnormal.h"
 
 /************************************************************
  * Tables for normal method                                 *
@@ -75,7 +76,7 @@ extern const double ytab[256] = {
 };
 
 #define N INT64_C
-extern const uint64_t ktab[256] = {
+extern const int64_t ktab[256] = {
 	N(0x0000000000000000), N(0x6045F480BBD90400), N(0x6D1AA78FEC3ACC00), N(0x728FB3B303FA6C00),
 	N(0x7592AF0E3B3C9C00), N(0x777A5BCDC3710400), N(0x78CA381B6C7C1800), N(0x79BF6AD5162EE800),
 	N(0x7A7A34715F8D1800), N(0x7B0D2EE83FD64000), N(0x7B83D372E3295000), N(0x7BE5972A4AFE3800),

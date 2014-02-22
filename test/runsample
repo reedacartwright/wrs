@@ -7,8 +7,12 @@ fi
 
 stream=1e8
 rep=10
-
 prog=$1
+
+if [ ! -x "${prog}" ]; then
+	echo "  ERROR: ${prog} is not an executable program."
+	exit 2
+fi
 
 samples=`seq 10000 10000 100000`
 

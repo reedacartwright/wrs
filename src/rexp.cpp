@@ -1,4 +1,5 @@
 #include <cstdint>
+#include "rexp.h"
 
 /************************************************************
  * Tables for exponential                                   *
@@ -139,7 +140,7 @@ extern const double ef[256] = {
 };
 
 #define N INT64_C
-extern const uint64_t ek[256] = {
+extern const int64_t ek[256] = {
 	N(0xE290A13924BE28), N(0x00000000000000), N(0x9BEADEBCE189B0), N(0xC377AC71F9DFA8),
 	N(0xD4DDB990758510), N(0xDE893FB8CA2398), N(0xE4A8E87C4328A0), N(0xE8DFF16AE1CB80),
 	N(0xEBF2DEAB58C588), N(0xEE49A6E8B96378), N(0xF0204EFD64EE40), N(0xF19BDB8EA3C1A8),

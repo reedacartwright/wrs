@@ -12,7 +12,7 @@
  */
  
 extern const double ytab[256];
-extern const uint32_t ktab[256];
+extern const int64_t ktab[256];
 extern const double wtab[256];
  
 /* position of right-most step */
@@ -55,7 +55,7 @@ double rand_normal_org(xorshift64 &rng, double mu, double sigma) {
 }
 */
 
-double rand_normal(xorshift64 &rng, double mu, double sigma) {
+inline double rand_normal(xorshift64 &rng, double mu, double sigma) {
 	const double R = 3.6554204190269415;
 	double x, y;
 	
