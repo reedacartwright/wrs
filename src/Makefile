@@ -1,3 +1,5 @@
+#g++ -g -O3 -c -fverbose-asm -Wa,-adhln -march=native -std=c++11 -ffast-math wrms-vtu.cpp > test.txt
+
 # g++ (GCC) 4.8.2 20131219 (prerelease)
 CXX ?= g++
 CXXFLAGS ?= -Wall -DNDEBUG -O3 -march=native -std=c++11 -ffast-math

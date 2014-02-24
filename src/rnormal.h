@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <cmath>
 
 #include "xorshift64.h"
 #include "rexp.h"
@@ -12,7 +13,7 @@
  */
  
 extern const double ytab[256];
-extern const int64_t ktab[256];
+extern const double ktab[256];
 extern const double wtab[256];
  
 /* position of right-most step */
@@ -55,7 +56,7 @@ double rand_normal_org(xorshift64 &rng, double mu, double sigma) {
 }
 */
 
-inline double rand_normal(xorshift64 &rng, double mu, double sigma) {
+inline double rand_normal(xorshift64 &rng, double mu=0.0, double sigma=1.0) {
 	const double R = 3.6554204190269415;
 	double x, y;
 	
@@ -65,20 +66,20 @@ inline double rand_normal(xorshift64 &rng, double mu, double sigma) {
 		uint64_t b = u >> 56;
 		// use the rest for a
 		int64_t a = static_cast<int64_t>(u << 8); 
+		double aa = static_cast<double>(a);
 		
-		x = a * wtab[b];
+		x = aa * wtab[b];
 
-		if (abs(a) < ktab[b])
+		if (std::abs(aa) < ktab[b])
 			break;
-
+		
 		if(b < 255) {
 			y = ytab[b + 1] + (ytab[b] - ytab[b + 1]) * rng.get_double52();
 		} else {
-			double U1 = 2.0*rng.get_double53() - (1.0-(DBL_EPSILON/2.0));
-			double U2 = rng.get_double52();
-			x = R - log(abs(U1)) / R;
-			y = exp(-R * (x - 0.5 * R)) * U2;
-			x = copysign(x, U1);
+			x = R + rand_exp(rng,R);
+			y = exp(-R * (x - 0.5 * R)) * rng.get_double52();
+			// Use aa to pick the sign of x
+			x = copysign(x,aa);
 		}
 
 		if (y < exp(-0.5 * x * x))
@@ -86,4 +87,3 @@ inline double rand_normal(xorshift64 &rng, double mu, double sigma) {
     }
 	return mu + sigma * x;
 }
-

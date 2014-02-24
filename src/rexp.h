@@ -26,7 +26,7 @@ inline double rand_exp_zig(xorshift64 &rng) {
 			return r+rand_exp_inv(rng);
 		double x = a*ew[b];
 		// we can cache ef[b-1]-ef[b], but it should be minor
-		if(ef[b]+rng.get_double52()*(ef[b-1]-ef[b]) < exp(-x) )
+		if(ef[b]+(ef[b-1]-ef[b])*rng.get_double52() < exp(-x) )
 			return x;
 		u = rng.get_uint64();
 		b = u >> 56;

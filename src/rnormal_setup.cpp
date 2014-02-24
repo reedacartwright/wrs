@@ -69,10 +69,10 @@ int main( int argc, const char* argv[] ) {
 	} while (aa<r && r<bb);
 	x[0] = 0;
 	
-	cout << "const int levels = " << LEVELS << ";\n";
-	cout << "const double R = " << scientific << setprecision(16) << r << ";\n\n";
+	cout << "//const int levels = " << LEVELS << ";\n";
+	cout << "//const double R = " << scientific << setprecision(16) << r << ";\n\n";
 	
-	cout << "extern const double ytab[256] = {";
+	cout << "const double ytab[256] = {";
 	i=0;
 	for(auto u : x) {
 		cout << ((i % 4 == 0) ? "\n\t" : " ");		
@@ -82,22 +82,22 @@ int main( int argc, const char* argv[] ) {
 	}
 	cout << "\n};" << endl << endl;
 	
-	cout << "#define N INT64_C\nextern const uint64_t ktab[256] = {";
+	cout << "const double ktab[256] = {";
 	for(i=0; i < LEVELS; ++i) {
 		cout << ((i % 4 == 0) ? "\n\t" : " ");
 		if(i < LEVELS-1) {
-			cout << "N(0x" << setw(16) << setfill('0') << hex << uppercase <<
-				(static_cast<int64_t>(9223372036854775808.0*x[i]/x[i+1])) << ")";
+			cout << scientific << setprecision(16) <<
+				(9223372036854775808.0*x[i]/x[i+1]);
 		} else {
-			cout << "N(0x" << setw(16) << setfill('0') << hex << uppercase <<
-				(static_cast<int64_t>(9223372036854775808.0*r*f(r)/v)) << ")";
+			cout << scientific << setprecision(16) <<
+				(9223372036854775808.0*r*f(r)/v);
 		}
 			
 		cout << ((i % 256 != 255) ? "," : "");
 	}
-	cout << "\n};\n#undef N" << endl;
+	cout << "\n};\n" << endl;
 	
-	cout << "extern const double wtab[256] = {";
+	cout << "const double wtab[256] = {";
 	for(i=0; i < LEVELS; ++i) {
 		cout << ((i % 4 == 0) ? "\n\t" : " ");
 		if(i < LEVELS-1) {
