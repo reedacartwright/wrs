@@ -1,24 +1,25 @@
-
 extern "C" {
 #include <unif01.h>
 #include <bbattery.h>
 }
 
+#include <cmath>
 #include <iostream>
 
 #include "xorshift64.h"
 #include "rexp.h"
+#include "rnormal.h"
 
 xorshift64 rng(3294533021);
 
-double rexp_inv(void) {
-	double x = rand_exp(rng);
-	return exp(-x);
+double rnormal_inv(void) {
+	double x = rand_normal(rng);
+	return 0.5*(1.0+erf(x/sqrt(2.0)));
 }
 
 int main( int argc, const char* argv[] ) {
 	unif01_Gen *gen;
-	gen = unif01_CreateExternGen01("RANDEXP", rexp_inv);
+	gen = unif01_CreateExternGen01("RANDNORM", rnormal_inv);
 
 	if(argc < 1 || argv[1][0] == 's')
 		bbattery_SmallCrush(gen);
