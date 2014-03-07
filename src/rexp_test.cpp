@@ -20,7 +20,7 @@ int main( int argc, const char* argv[] ) {
 	unif01_Gen *gen;
 	gen = unif01_CreateExternGen01("RANDEXP", rexp_inv);
 
-	if(argc < 1 || argv[1][0] == 's')
+	if(argc < 2 || argv[1][0] == 's')
 		bbattery_SmallCrush(gen);
 	else if(argv[1][0] == 'm')
 		bbattery_Crush(gen);
