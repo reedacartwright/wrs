@@ -1,4 +1,27 @@
-
+/* Algorithm WRMS-HW
+ * Features: heap-reservoir; weight-based exponentials
+ *
+ * Copyright (C) 2014 Reed A. Cartwright <reed@cartwrig.ht>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+ 
 #include <cstdlib>
 #include <iostream>
 #include <queue>
@@ -30,26 +53,30 @@ int main( int argc, const char* argv[] ) {
 	for(int64_t g=0;g<sample_num;++g) {
 		// construct the stream RNG
 		xorshift64 stream(stream_seed); //2693652924
-
-		reservoir res(sample_size,make_pair(0.0,0));
+		
+		int64_t n = sample_size;
+		reservoir res(n,make_pair(0.0,0));
 
 		// Algorithm WRMS-HW
-		double w = stream.get_double52();
-		double v = 0.0;
+		double lambda = stream.get_double52();
+		double t = 0.0;
+		double tau;
 		for(int64_t i=sample_size;i>0;--i) {
-			v += rand_exp(rng,w);
-			res[i-1].first = v;
+			t += rand_exp(rng,lambda);
+			res[i-1].first = t;
 		}
 		
 		for(int64_t i=1;i<stream_size;++i) {
-			w = stream.get_double52();
-			v = rand_exp(rng,w);
-			while(v < res.front().first ) {
+			lambda = stream.get_double52();
+			t = rand_exp(rng,lambda);
+			tau = res.front().first;
+			while(t < tau) {
 				pop_heap(res.begin(),res.end());
-				res.back().first = v;
+				res.back().first = t;
 				res.back().second = i;
 				push_heap(res.begin(),res.end());
-				v += rand_exp(rng,w);
+				tau = res.front().first;
+				t += rand_exp(rng,lambda);
 			}
 		}
 				
