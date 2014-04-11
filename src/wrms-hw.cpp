@@ -61,12 +61,12 @@ int main( int argc, const char* argv[] ) {
 		double lambda = stream.get_double52();
 		double t = 0.0;
 		double tau;
-		for(int64_t i=sample_size;i>0;--i) {
+		for(int64_t i=n;i>0;--i) {
 			t += rand_exp(rng,lambda);
 			res[i-1].first = t;
 		}
 		
-		for(int64_t i=1;i<stream_size;++i) {
+		for(int64_t i=1;i<n;++i) {
 			lambda = stream.get_double52();
 			t = rand_exp(rng,lambda);
 			tau = res.front().first;
