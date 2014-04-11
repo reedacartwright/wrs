@@ -1,3 +1,7 @@
+#pragma once
+#ifndef RNORMAL_H
+#define RNOMRAL_H
+
 #include <cstdint>
 #include <cmath>
 
@@ -87,3 +91,6 @@ inline double rand_normal(xorshift64 &rng, double mu=0.0, double sigma=1.0) {
     }
 	return mu + sigma * x;
 }
+
+#endif
+
