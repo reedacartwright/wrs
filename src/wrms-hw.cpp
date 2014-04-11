@@ -66,7 +66,7 @@ int main( int argc, const char* argv[] ) {
 			res[i-1].first = t;
 		}
 		
-		for(int64_t i=1;i<n;++i) {
+		for(int64_t i=1;i<stream_size;++i) {
 			lambda = stream.get_double52();
 			t = rand_exp(rng,lambda);
 			tau = res.front().first;
