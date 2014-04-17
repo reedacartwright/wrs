@@ -53,7 +53,7 @@ public:
 	}
 	
 	// Uniform [0,n) with 64-bits of precision
-	uint64_t get_uint(uint64_t n) {
+	uint64_t get_uint64(uint64_t n) {
 		return get_uint64() % n;
 	}
 

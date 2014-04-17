@@ -1,6 +1,5 @@
-/* Algorithm WRMS-HTU
- * Features: heap-reservoir; time-based exponentials
- *           uniform-based auxiliary values
+/* Algorithm WRMS-VT
+ * Features: vector-reservoir; time-based exponentials
  *
  * Copyright (C) 2014 Reed A. Cartwright <reed@cartwrig.ht>
  *
@@ -22,17 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
- 
+
 #include <cstdlib>
 #include <iostream>
 #include <queue>
+#include <vector>
 
 #include "xorshift64.h"
 #include "rexp.h"
+#include "rbeta.h"
 
-// implement reservoir as a heap of pairs
-typedef std::pair<double,int> element;
-typedef std::vector<element> reservoir;
+// implement reservoir as a vector
+typedef std::vector<int> reservoir;
 
 using namespace std;
 
@@ -56,36 +56,26 @@ int main( int argc, const char* argv[] ) {
 		xorshift64 stream(stream_seed); //2693652924
 
 		int64_t n = sample_size;
-		reservoir res(n, make_pair(0.0,0));
-		
-		// Algorithm WRMS-HTU
+		reservoir res(sample_size,0);
+						
+		// Algorithm WRMS-VT
 		double lambda = stream.get_double52();
-		double t = 0.0;
-		for(int64_t i=sample_size;i>0;--i) {
-			t += rand_exp(rng,lambda);
-			res[i-1].first = t;
-		}
-		
-		double tau = res.front().first;
+		double tau = rand_gamma(rng,n,1.0/lambda);
 		double h = rand_exp(rng,tau);
 		
 		for(int64_t i=1;i<stream_size;++i) {
 			lambda = stream.get_double52();
 			while(h < lambda) {
-				t = tau*rng.get_double52();
-				
-				pop_heap(res.begin(),res.end());
-				res.back().first = t;
-				res.back().second = i;
-				push_heap(res.begin(),res.end());
-				tau = res.front().first;
+				uint64_t j = rng.get_uint64(n);
+				res[j] = i;
+				//tau *= rand_beta(rng,n,1);
+				tau *= exp(-rand_exp(rng,n));
 				lambda = lambda-h;
 				h = rand_exp(rng,tau);
 			}
-			h -= lambda;
+			h = h-lambda;
 		}
-				
-		cout << res.front().second << endl;
+		cout << res.front() << endl;
 	}
 	return 0;
 }

@@ -22,7 +22,6 @@
  * SOFTWARE.
  */
 
-
 #include <cstdlib>
 #include <iostream>
 #include <queue>
@@ -55,7 +54,7 @@ int main( int argc, const char* argv[] ) {
 		// construct the stream RNG
 		xorshift64 stream(stream_seed); //2693652924
 
-		int64_t n = sample_num;
+		int64_t n = sample_size;
 		reservoir res(n,make_pair(0.0,0));
 
 		// Algorithm WRMS-HT

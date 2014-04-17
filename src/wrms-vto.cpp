@@ -1,6 +1,6 @@
-/* Algorithm WRMS-HTU
- * Features: heap-reservoir; time-based exponentials
- *           uniform-based auxiliary values
+/* Algorithm WRMS-VTO
+ * Features: vector-reservoir; time-based exponentials
+ *           ordered multiple hits 
  *
  * Copyright (C) 2014 Reed A. Cartwright <reed@cartwrig.ht>
  *
@@ -22,17 +22,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
- 
+
 #include <cstdlib>
 #include <iostream>
 #include <queue>
+#include <vector>
 
 #include "xorshift64.h"
 #include "rexp.h"
+#include "rbeta.h"
 
-// implement reservoir as a heap of pairs
-typedef std::pair<double,int> element;
-typedef std::vector<element> reservoir;
+// implement reservoir as a vector
+typedef std::vector<int> reservoir;
 
 using namespace std;
 
@@ -55,37 +56,44 @@ int main( int argc, const char* argv[] ) {
 		// construct the stream RNG
 		xorshift64 stream(stream_seed); //2693652924
 
+		reservoir res;
+					
+		// Algorithm WRMS-VTO
 		int64_t n = sample_size;
-		reservoir res(n, make_pair(0.0,0));
-		
-		// Algorithm WRMS-HTU
-		double lambda = stream.get_double52();
-		double t = 0.0;
-		for(int64_t i=sample_size;i>0;--i) {
-			t += rand_exp(rng,lambda);
-			res[i-1].first = t;
-		}
-		
-		double tau = res.front().first;
+		res.assign(n,0);
+
+		double lambda = stream.get_double52();		
+		double tau = rand_gamma(rng,sample_size,1.0/lambda);
 		double h = rand_exp(rng,tau);
 		
-		for(int64_t i=1;i<stream_size;++i) {
-			lambda = stream.get_double52();
+		for(int i=1;i<stream_size;++i) {
+			w = stream.get_double52();
+			double t = 0.0;
+			int64_t nn = n;
 			while(h < lambda) {
-				t = tau*rng.get_double52();
+				// Use a partial Fisher-Yates shuffle to identify elements
+				// to replace.
+				int j = rng.get_uint64(nn);
+				nn = nn-1;
+				res[j] = res[nn];
+				res[nn] = i;
 				
-				pop_heap(res.begin(),res.end());
-				res.back().first = t;
-				res.back().second = i;
-				push_heap(res.begin(),res.end());
-				tau = res.front().first;
-				lambda = lambda-h;
+				// Calculate the emission time based on the horizontal
+				// position of the emission
+				t = t+(tau-t)*h/lambda;
+				// Simulate the next max-height in the reservoir and
+				// check to see if it is above or below the emission time.
+				if(nn == 0 || (tau *= exp(-rand_exp(rng,nn))) < t ) {
+					tau = t;
+				}
+				
+				// Update weight and simulate next step
+				lambda = lambda*(tau-t)/tau;
 				h = rand_exp(rng,tau);
 			}
-			h -= lambda;
+			h = h-lambda;		
 		}
-				
-		cout << res.front().second << endl;
+		cout << res.back() << endl;
 	}
 	return 0;
 }
