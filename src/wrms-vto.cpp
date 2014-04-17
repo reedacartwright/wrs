@@ -67,7 +67,7 @@ int main( int argc, const char* argv[] ) {
 		double h = rand_exp(rng,tau);
 		
 		for(int i=1;i<stream_size;++i) {
-			w = stream.get_double52();
+			lambda = stream.get_double52();
 			double t = 0.0;
 			int64_t nn = n;
 			while(h < lambda) {
