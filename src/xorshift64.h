@@ -56,6 +56,24 @@ public:
 	uint64_t get_uint64(uint64_t n) {
 		return get_uint64() % n;
 	}
+	
+	// Uniform [0,n) exactly
+	uint64_t get_uint64x(uint64_t n) {
+		// Find a mask
+		uint64_t v = n;
+		v--;
+		v |= v >> 1;
+		v |= v >> 2;
+		v |= v >> 4;
+		v |= v >> 8;
+		v |= v >> 16;
+		v |= v >> 32;
+		uint64_t u;
+		do {
+			u = get_uint64() & v;
+		} while( u >= n);
+		return u;
+	}
 
 	// Uniform [0,1)
 	double get_double53() {
@@ -77,12 +95,12 @@ public:
 	
 	// Uniform [0,max)
 	uint64_t operator()() {
-		return get_raw();
+		return get_uint64();
 	}
 	
 	// Uniform [0,n) with 64-bits of precision
 	uint64_t operator()(uint64_t n) {
-		return get_uint(n);
+		return get_uint64(n);
 	}
 	
 private:
