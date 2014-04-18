@@ -6,7 +6,7 @@ if [ $# -eq 0 ]; then
 fi
 
 stream=1e8
-rep=10
+rep=100
 weight=2693652924
 seed=3294533022
 prog=$1
@@ -27,7 +27,7 @@ function ctrl_c() {
 $prog $stream 10000 1 $weight $seed >/dev/null
 
 for i in $samples; do
-	echo -n `basename $prog`"	$stream	$i	"
-	/usr/bin/time -f "%e\t%M\t%R\t%F" $prog $stream $i $rep $weight $seed 2>&1 >/dev/null
+	echo -n `basename $prog`"	$i	$i	"
+	/usr/bin/time -f "%e\t%M\t%R\t%F" $prog $i $i $rep $weight $seed 2>&1 >/dev/null
 done
 

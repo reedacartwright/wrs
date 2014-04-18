@@ -2,6 +2,8 @@
 #ifndef XORSHIFT64_H
 #define XORSHIFT64_H
 
+#include <endian.h>
+
 #include <cfloat>
 #include <cstdint>
 #include <algorithm>
@@ -58,6 +60,7 @@ public:
 	}
 	
 	// Uniform [0,n) exactly
+	// TODO: this uses low bits which are not very random
 	uint64_t get_uint64x(uint64_t n) {
 		// Find a mask
 		uint64_t v = n;
@@ -75,6 +78,9 @@ public:
 		return u;
 	}
 
+#if __FLOAT_WORD_ORDER != __BYTE_ORDER
+#	pragma message("The xorshift64::get_double functions are not supported on your platform")
+#else
 	// Uniform [0,1)
 	double get_double53() {
 		union { uint64_t u; double d; } a;
@@ -92,6 +98,7 @@ public:
 		double q = (1.0-(DBL_EPSILON/2.0));
 		return a.d-q;
 	}
+#endif	
 	
 	// Uniform [0,max)
 	uint64_t operator()() {

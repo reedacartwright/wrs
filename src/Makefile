@@ -13,7 +13,8 @@ CXXFLAGS = -Wall -DNDEBUG -fast -std=c++11
 HEADERS = rexp.h xorshift64.h rgamma.h rnormal.h rbeta.h
 OBJ = rexp.o
 TARGETS = wrms-ht wrms-htu wrms-hw wrms-vt wrms-htm \
-          wrms-htw wrms-vto wrms-vt-a wrms-vt-b std
+          wrms-htw wrms-vto wrms-vt-a wrms-vt-b \
+          std vose
 
 .PHONY: clean
 .PHONY: all
@@ -30,6 +31,7 @@ clean:
 	rm -f *.o *~ core
 
 std: std.o
+vose: vose.o
 wrms-hw: wrms-hw.o
 wrms-ht: wrms-ht.o
 wrms-htm: wrms-htm.o

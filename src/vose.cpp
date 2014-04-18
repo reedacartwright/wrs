@@ -1,5 +1,5 @@
-/* Algorithm STD
- * Features: binary search of cummulative weights
+/* Algorithm VOSE
+ * Features: table alias method to draw values
  *
  * Copyright (C) 2014 Reed A. Cartwright <reed@cartwrig.ht>
  *
@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
+
 #include <cstdlib>
 #include <iostream>
 #include <queue>
@@ -30,6 +31,7 @@
 #include "xorshift64.h"
 #include "rexp.h"
 #include "rbeta.h"
+#include "aliastable.h"
 
 // implement reservoir as a vector
 typedef std::vector<int> reservoir;
@@ -67,14 +69,14 @@ int main( int argc, const char* argv[] ) {
 			totalw += stream.get_double52();
 			table.push_back(totalw);
 		}
+		alias_table at;
+		at.create_inplace(table);
 		
 		// Second Pass, reset stream
 		stream.seed(stream_seed);
 		
 		for(int64_t i=0;i<sample_size;++i) {
-			double w = totalw*rng.get_double52();
-			auto it = lower_bound(table.begin(),table.end(),w);
-			res[i] = it-table.begin();
+			res[i] = at.get(rng.get_uint64());
 		}
 		cout << res.back() << endl;
 	}

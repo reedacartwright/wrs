@@ -1,0 +1,5 @@
+./runsample-equ ../src/wrms-hw
+./runsample-equ ../src/wrms-ht
+./runsample-equ ../src/wrms-vt
+./runsample-equ ../src/std
+./runsample-equ ../src/vose

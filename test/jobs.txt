@@ -1,0 +1,5 @@
+./runsample ../src/wrms-hw
+./runsample ../src/wrms-ht
+./runsample ../src/wrms-vt
+./runsample ../src/std
+./runsample ../src/vose
